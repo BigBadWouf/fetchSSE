@@ -29,14 +29,14 @@
     "fetch",
     "reconnection"
   ],
-  "author": "Ton nom <email@example.com>",
+  "author": "Manuel Molé <wolf@flem.me>",
   "license": "MIT",
-  "homepage": "https://github.com/tonusername/fetchsse#readme",
+  "homepage": "https://github.com/BigBadWouf/fetchSSE#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tonusername/fetchsse.git"
+    "url": "git+https://github.com/BigBadWouf/fetchSSE.git"
   },
   "bugs": {
-    "url": "https://github.com/tonusername/fetchsse/issues"
+    "url": "https://github.com/BigBadWouf/fetchSSE/issues"
   }
 }
