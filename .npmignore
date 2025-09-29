@@ -1,0 +1,11 @@
+src/
+build.js
+.git/
+.gitignore
+*.md
+!README.md
+!LICENSE.md
+node_modules/
+.DS_Store
+.env
+rollup.config.js

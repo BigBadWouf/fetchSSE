@@ -1,0 +1,42 @@
+{
+  "name": "fetchsse",
+  "version": "1.0.0",
+  "description": "Modern Server-Sent Events with automatic reconnection and advanced features",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "sse",
+    "server-sent-events",
+    "stream",
+    "realtime",
+    "fetch",
+    "reconnection"
+  ],
+  "author": "Ton nom <email@example.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/tonusername/fetchsse#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonusername/fetchsse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tonusername/fetchsse/issues"
+  }
+}
