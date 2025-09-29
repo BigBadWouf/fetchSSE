@@ -1,6 +1,10 @@
-# fetchSSE
+[![npm version](https://badge.fury.io/js/modern-sse.svg)](https://badge.fury.io/js/modern-sse)
+[![GitHub repo](https://img.shields.io/badge/GitHub-fetchsse-blue)](https://github.com/bigbadwouf/fetchsse)
+
+# modern-sse
 
 🚀 Une bibliothèque JavaScript moderne pour Server-Sent Events (SSE) avec reconnexion automatique et support avancé
+
 ## ✨ Fonctionnalités
 - 🔄 Reconnexion automatique avec stratégie configurable
 - 🆔 Gestion des Event IDs avec support Last-Event-ID
@@ -14,13 +18,13 @@
 ## 🚀 Installation
 
 ```bash
-npm install fetchsse
+npm install modern-sse
 ```
 
 ## 📖 Usage basique
 
 ```js
-import { fetchSSE } from 'fetchsse';
+import { fetchSSE } from 'modern-sse';
 
 const sse = fetchSSE('https://api.example.com/stream');
 
@@ -195,7 +199,7 @@ sse.addEventListener('error', (event) => {
 ```
 
 ## 🌟 Pourquoi fetchSSE ?
-| Fonctionnalité 	| EventSource natif 	| fetchSSE
+| Fonctionnalité 	| EventSource natif 	| modern-sse
 | ----------------- | --------------------- | ---------
 | Reconnexion auto 	| ✅ 	| ✅
 | Event IDs 	| ✅ 	| ✅

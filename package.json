@@ -1,6 +1,6 @@
 {
-  "name": "fetchsse",
-  "version": "1.0.0",
+  "name": "modern-sse",
+  "version": "1.0.1",
   "description": "Modern Server-Sent Events with automatic reconnection and advanced features",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
