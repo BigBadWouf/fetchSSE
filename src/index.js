@@ -10,6 +10,18 @@ class SSEFetchError extends Error {
   }
 }
 
+function serializeSSEError(error) {
+  return JSON.stringify({
+    name: error?.name || 'Error',
+    code: error?.status || error?.code || 0,
+    status: error?.status || 0,
+    statusText: error?.statusText || '',
+    message: error?.message || 'Unknown error',
+    body: error?.body ?? null,
+    data: error?.data ?? null,
+  });
+}
+
 const fetchSSE = (url, options = {}) => {
   const {
     method = 'GET',
@@ -83,7 +95,10 @@ const fetchSSE = (url, options = {}) => {
     addJSONEventListener(event, callback) {
       this.addEventListener(event, (eventObject) => {
         try {
-          const jsonData = JSON.parse(eventObject.data);
+          const jsonData = typeof eventObject.data === 'string'
+            ? JSON.parse(eventObject.data)
+            : eventObject.data;
+
           callback({
             ...eventObject,
             data: jsonData
@@ -304,7 +319,7 @@ const fetchSSE = (url, options = {}) => {
             read(); // Continue reading
           }).catch(error => {
             if (!isClosed) {
-              sse.dispatchEvent('error', error.message);
+              sse.dispatchEvent('error', serializeSSEError(error));
               scheduleReconnect();
             }
           });
@@ -315,7 +330,7 @@ const fetchSSE = (url, options = {}) => {
       .catch(error => {
         if (!isClosed) {
           console.error('SSE connection error:', error);
-          sse.dispatchEvent('error', error.message);
+          sse.dispatchEvent('error', serializeSSEError(error));
           scheduleReconnect();
         }
       });
