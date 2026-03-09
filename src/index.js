@@ -1,3 +1,15 @@
+class SSEFetchError extends Error {
+  constructor(message, options = {}) {
+    super(message)
+    this.name = 'SSEFetchError'
+    this.status = options.status
+    this.statusText = options.statusText
+    this.body = options.body
+    this.data = options.data
+    this.response = options.response
+  }
+}
+
 const fetchSSE = (url, options = {}) => {
   const {
     method = 'GET',
@@ -188,15 +200,15 @@ const fetchSSE = (url, options = {}) => {
     if (customRetryLogic) {
       return customRetryLogic(error, retryCount);
     }
-    
+
     // Logique de retry par défaut
     if (retryCount >= maxRetries) return false;
-    
+
     // Ne pas retry sur certaines erreurs HTTP
     if (error.status && [400, 401, 403, 404, 410].includes(error.status)) {
       return false;
     }
-    
+
     return true;
   };
 
@@ -207,12 +219,33 @@ const fetchSSE = (url, options = {}) => {
     const fetchOptions = buildFetchOptions();
 
     fetch(url, fetchOptions)
-      .then(response => {
+      .then(async (response) => {
         if (!response.ok) {
-          const err = new Error(`HTTP ${response.status}: ${response.statusText}`);
-          err.status = response.status;
-          err.response = response;
-          throw err;
+          const contentType = response.headers.get('content-type') || ''
+
+          let body = null
+          let data = null
+
+          try {
+            body = await response.text()
+          } catch { }
+
+          if (body && contentType.includes('application/json')) {
+            try {
+              data = JSON.parse(body)
+            } catch { }
+          }
+
+          throw new SSEFetchError(
+            data?.message || body || `HTTP ${response.status}: ${response.statusText}`,
+            {
+              status: response.status,
+              statusText: response.statusText,
+              body,
+              data,
+              response
+            }
+          )
         }
 
         // Vérifier que c'est bien du text/event-stream
@@ -223,7 +256,7 @@ const fetchSSE = (url, options = {}) => {
 
         sse.readyState = 1; // OPEN
         retryCount = 0; // Reset retry count on successful connection
-        
+
         console.info('SSE connection established');
         sse.dispatchEvent('open', null);
 
@@ -292,10 +325,10 @@ const fetchSSE = (url, options = {}) => {
     if (isClosed) return;
 
     clearTimeout(retryTimeout);
-    
+
     // Créer un objet erreur pour la logique de retry
     const retryError = { retryCount, lastError: 'Connection lost' };
-    
+
     if (!shouldRetry(retryError)) {
       console.warn('Max retries reached or retry not allowed');
       sse.close();
@@ -304,7 +337,7 @@ const fetchSSE = (url, options = {}) => {
 
     retryCount++;
     console.info(`Scheduling SSE reconnection (attempt ${retryCount}) in ${currentRetryDelay}ms`);
-    
+
     retryTimeout = setTimeout(() => {
       if (!isClosed) {
         connect();
